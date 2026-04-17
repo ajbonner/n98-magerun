@@ -357,8 +357,6 @@ abstract class AbstractMagentoCommand extends Command
 
     public function run(InputInterface $input, OutputInterface $output): int
     {
-        $this->getHelperSet()->setCommand($this);
-
         return parent::run($input, $output);
     }
 
