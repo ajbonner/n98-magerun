@@ -33,6 +33,13 @@ class DatabaseHelper extends AbstractHelper
 
     protected ?array $_tables = null;
 
+    protected ?Application $application;
+
+    public function __construct(?Application $application = null)
+    {
+        $this->application = $application;
+    }
+
     public function detectDbSettings(OutputInterface $output, ?string $connectionNode = null): void
     {
         if (!is_null($this->dbSettings)) {
@@ -576,13 +583,7 @@ class DatabaseHelper extends AbstractHelper
      */
     private function getApplication()
     {
-        $command = $this->getHelperSet()->getCommand();
-
-        if ($command) {
-            return $command->getApplication();
-        }
-
-        return new Application();
+        return $this->application ?? new Application();
     }
 
     /**

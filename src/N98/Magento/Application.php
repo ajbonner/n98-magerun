@@ -12,6 +12,7 @@ use N98\Magento\Application\Config;
 use N98\Magento\Application\ConfigurationLoader;
 use N98\Magento\Application\Console\Event;
 use N98\Magento\Application\Console\Events;
+use N98\Util\Console\Helper\DatabaseHelper;
 use N98\Util\Console\Helper\MagentoHelper;
 use N98\Util\Console\Helper\TwigHelper;
 use N98\Util\OperatingSystem;
@@ -233,12 +234,12 @@ class Application extends BaseApplication
                 );
             }
 
-            // Twig helper needs the config-file
             /** @var HelperInterface $helper */
-            $helper = TwigHelper::class === $helperClass
-                ? new $helperClass($this->config)
-                : new $helperClass()
-            ;
+            $helper = match ($helperClass) {
+                TwigHelper::class     => new $helperClass($this->config),
+                DatabaseHelper::class => new $helperClass($this),
+                default               => new $helperClass(),
+            };
             $helperSet->set($helper, $helperName);
         }
     }
